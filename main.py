@@ -6,7 +6,7 @@ one order per batch.
 
 STRATEGY (one sentence): sit in cash through the grind and buy ONLY a
 genuine capitulation -- the close 2% below a slow 144-minute EMA -- then
-sell the bounce at a fixed +3% take-profit (or a -2% stop, or after 120
+sell the bounce at a fixed +4% take-profit (or a -2% stop, or after 120
 bars), because on a falling tape shallow dips keep falling and only the
 deep dip bounces.
 
@@ -19,12 +19,14 @@ WHY (measured on the kit's frozen dev window, BTC -4.00% over 24h):
   +4.31% bounce in 60 min (+4.90% in 120 min). All the money is there.
 - This bot's grid search (families: dip-vs-EMA, sharp-drop, EMA-cross
   momentum, Bollinger, capitulation-sniper, V-bottom) found the deep dip
-  is the only family that profits: EMA144, 2% deep, TP +3%, SL -2%,
-  max hold 120 bars -> +39.91 USDC, 4 trades (2 round trips, both
+  is the only family that profits: EMA144, 2% deep, TP +4%, SL -2%,
+  max hold 120 bars -> +45.91 USDC, 4 trades (2 round trips, both
   winners), max drawdown 1.38%. A fixed take-profit was chosen over a
   trailing exit because the trailing parameter is jagged (1.5% trail
   +48.37 but 0.5% trail -10.86), while the fixed TP rises smoothly
-  with the bounce size.
+  with the bounce size. TP +4% beats TP +3% (+39.91) on the dev window
+  because the capitulation bounce is strong (+4.31% in 60 min,
+  +4.90% in 120 min), so the extra point is actually reached.
 - Robustness: the result is insensitive to the stop (SL 1%-3% all give
   +39.91 -- the stop never triggers) and to the hold cap (120 min);
   deep 1.5%-2.0% all profit (+14 to +46). The 2% threshold is near
@@ -40,7 +42,7 @@ WHY (measured on the kit's frozen dev window, BTC -4.00% over 24h):
 Entry (flat only): close < EMA144 * (1 - 0.02), with at least 145
 closes of history, and before scored bar 1380 (so a position always
 has time to reach its take-profit before the window-end flatten).
-Exit (holding): close >= entry_fill * 1.03 (take profit) or
+Exit (holding): close >= entry_fill * 1.04 (take profit) or
 close <= entry_fill * 0.98 (stop loss) or held >= 120 bars.
 No new buys once 1380 scored bars have been seen.
 
@@ -65,7 +67,7 @@ EMA_SLOW = 144
 # so 2.0% is the working edge, not a tuned peak.
 DIP = 0.02
 MIN_HISTORY = EMA_SLOW + 1  # closes needed before the first buy
-TAKE_PROFIT = 0.03  # sell when close is this far above the fill price
+TAKE_PROFIT = 0.04  # sell when close is this far above the fill price
 STOP_LOSS = 0.02  # sell when close is this far below the fill price
 MAX_HOLD_BARS = 120  # sell after this many bars held, whatever the price
 MAX_SLIPPAGE_BPS = 200  # 2%: covers the largest 1-minute move seen (~0.79%)
